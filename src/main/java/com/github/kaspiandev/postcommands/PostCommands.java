@@ -39,7 +39,7 @@ public final class PostCommands extends JavaPlugin {
                 .create((config) -> {
                     config.jsonMapper(new GsonMapper(gson));
                 })
-                .addEndpoint(new ExecuteEndpoint())
+                .addEndpoint(new ExecuteEndpoint(this))
                 .start(getConfig().getString("host"), getConfig().getInt("port"));
 
     }

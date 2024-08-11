@@ -4,6 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+import java.util.Optional;
+
 public class ServerCommandRequest extends CommandRequest {
 
     public ServerCommandRequest(String command) {
@@ -11,8 +13,8 @@ public class ServerCommandRequest extends CommandRequest {
     }
 
     @Override
-    public CommandSender getSender() {
-        return Bukkit.getConsoleSender();
+    public Optional<CommandSender> getSender() {
+        return Optional.of(Bukkit.getConsoleSender());
     }
 
 }

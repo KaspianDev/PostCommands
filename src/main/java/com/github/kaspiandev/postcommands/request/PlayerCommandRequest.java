@@ -4,6 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Optional;
+
 public class PlayerCommandRequest extends CommandRequest {
 
     private final String playerName;
@@ -14,8 +16,8 @@ public class PlayerCommandRequest extends CommandRequest {
     }
 
     @Override
-    public CommandSender getSender() {
-        return Bukkit.getPlayer(playerName);
+    public Optional<CommandSender> getSender() {
+        return Optional.ofNullable(Bukkit.getPlayer(playerName));
     }
 
 }

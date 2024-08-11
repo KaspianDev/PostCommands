@@ -1,8 +1,9 @@
 package com.github.kaspiandev.postcommands.request;
 
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+
+import java.util.Optional;
 
 public abstract class CommandRequest {
 
@@ -22,10 +23,13 @@ public abstract class CommandRequest {
         return type;
     }
 
-    public abstract CommandSender getSender();
+    public abstract Optional<CommandSender> getSender();
 
-    public void execute() {
-        Bukkit.dispatchCommand(getSender(), command);
+    public boolean execute() {
+        return getSender().map((sender) -> {
+            Bukkit.dispatchCommand(sender, command);
+            return true;
+        }).orElse(false);
     }
 
 }
