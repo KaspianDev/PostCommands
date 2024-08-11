@@ -1,6 +1,9 @@
 package com.github.kaspiandev.postcommands;
 
+import com.github.kaspiandev.postcommands.endpoint.ExecuteEndpoint;
 import com.github.kaspiandev.postcommands.token.TokenSecretGenerator;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import io.javalin.Javalin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -24,8 +27,12 @@ public final class PostCommands extends JavaPlugin {
 
         saveConfig();
 
-        Javalin javalin = Javalin.create()
-                .start();
+        Javalin javalin = Javalin
+                .create((config) -> {
+                    config.jsonMapper(new GsonMapper());
+                })
+                .addEndpoint(new ExecuteEndpoint())
+                .start(getConfig().getString("host"), getConfig().getInt("port"));
 
     }
 
