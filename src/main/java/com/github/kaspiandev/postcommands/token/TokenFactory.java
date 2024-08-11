@@ -13,6 +13,6 @@ public class TokenFactory {
         this.algorithm = Algorithm.HMAC256("");
     }
 
-
+    // TODO: Better, permission-based tokens
 
 }
