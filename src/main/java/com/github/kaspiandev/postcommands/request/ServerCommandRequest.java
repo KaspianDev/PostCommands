@@ -1,7 +1,6 @@
 package com.github.kaspiandev.postcommands.request;
 
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import java.util.Optional;

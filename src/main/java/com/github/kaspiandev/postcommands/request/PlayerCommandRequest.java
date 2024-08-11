@@ -17,6 +17,8 @@ public class PlayerCommandRequest extends CommandRequest {
 
     @Override
     public Optional<CommandSender> getSender() {
+        if (playerName == null || playerName.isEmpty()) return Optional.empty();
+
         return Optional.ofNullable(Bukkit.getPlayer(playerName));
     }
 

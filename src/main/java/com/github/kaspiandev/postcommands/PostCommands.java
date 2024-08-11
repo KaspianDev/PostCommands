@@ -2,9 +2,7 @@ package com.github.kaspiandev.postcommands;
 
 import com.github.kaspiandev.postcommands.endpoint.ExecuteEndpoint;
 import com.github.kaspiandev.postcommands.request.CommandRequest;
-import com.github.kaspiandev.postcommands.request.PlayerCommandRequest;
 import com.github.kaspiandev.postcommands.request.RequestDeserializer;
-import com.github.kaspiandev.postcommands.request.ServerCommandRequest;
 import com.github.kaspiandev.postcommands.token.TokenSecretGenerator;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

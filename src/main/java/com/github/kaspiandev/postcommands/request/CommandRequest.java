@@ -25,11 +25,15 @@ public abstract class CommandRequest {
 
     public abstract Optional<CommandSender> getSender();
 
-    public boolean execute() {
+    public RequestStatus execute() {
         return getSender().map((sender) -> {
+            if (command == null || command.isEmpty()) {
+                return RequestStatus.COMMAND_UNSET;
+            }
+
             Bukkit.dispatchCommand(sender, command);
-            return true;
-        }).orElse(false);
+            return RequestStatus.OK;
+        }).orElse(RequestStatus.NO_SENDER);
     }
 
 }
