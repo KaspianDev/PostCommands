@@ -36,9 +36,7 @@ public final class PostCommands extends JavaPlugin {
         saveConfig();
 
         Javalin javalin = Javalin
-                .create((config) -> {
-                    config.jsonMapper(new GsonMapper(gson));
-                })
+                .create()
                 .addEndpoint(new ExecuteEndpoint(this))
                 .start(getConfig().getString("host"), getConfig().getInt("port"));
 
