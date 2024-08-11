@@ -1,0 +1,4 @@
+name: PostCommands
+version: '${version}'
+main: com.github.kaspiandev.postcommands.PostCommands
+api-version: '1.19'
