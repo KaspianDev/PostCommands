@@ -1,5 +1,6 @@
 package com.github.kaspiandev.postcommands.endpoint;
 
+import com.github.kaspiandev.postcommands.request.CommandRequest;
 import io.javalin.http.HandlerType;
 import io.javalin.router.Endpoint;
 
@@ -9,7 +10,7 @@ public class ExecuteEndpoint extends Endpoint {
         super(HandlerType.POST,
                 "/execute/{command}",
                 (context) -> {
-                    context.bodyAsClass();
+                    CommandRequest request = context.bodyAsClass(CommandRequest.class);
                 });
     }
 

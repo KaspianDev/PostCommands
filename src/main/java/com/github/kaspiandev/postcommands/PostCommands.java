@@ -1,6 +1,10 @@
 package com.github.kaspiandev.postcommands;
 
 import com.github.kaspiandev.postcommands.endpoint.ExecuteEndpoint;
+import com.github.kaspiandev.postcommands.request.CommandRequest;
+import com.github.kaspiandev.postcommands.request.PlayerCommandRequest;
+import com.github.kaspiandev.postcommands.request.RequestDeserializer;
+import com.github.kaspiandev.postcommands.request.ServerCommandRequest;
 import com.github.kaspiandev.postcommands.token.TokenSecretGenerator;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -10,6 +14,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.security.NoSuchAlgorithmException;
 
 public final class PostCommands extends JavaPlugin {
+
+    private final Gson gson = new GsonBuilder()
+            .registerTypeAdapter(CommandRequest.class, new RequestDeserializer())
+            .create();
 
     @Override
     public void onEnable() {
@@ -29,7 +37,7 @@ public final class PostCommands extends JavaPlugin {
 
         Javalin javalin = Javalin
                 .create((config) -> {
-                    config.jsonMapper(new GsonMapper());
+                    config.jsonMapper(new GsonMapper(gson));
                 })
                 .addEndpoint(new ExecuteEndpoint())
                 .start(getConfig().getString("host"), getConfig().getInt("port"));
@@ -40,4 +48,9 @@ public final class PostCommands extends JavaPlugin {
     public void onDisable() {
         // Plugin shutdown logic
     }
+
+    public Gson getGson() {
+        return gson;
+    }
+
 }
