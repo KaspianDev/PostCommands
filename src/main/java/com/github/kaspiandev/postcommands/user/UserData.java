@@ -33,10 +33,11 @@ public class UserData implements ConfigurationSerializable {
         return permissions;
     }
 
-    public Optional<APIPermission> getPermission(APIPermission permission) {
-        return permissions.stream()
-                          .filter(permission::equals)
-                          .findFirst();
+    @SuppressWarnings("unchecked")
+    public <T extends APIPermission> Optional<T> getPermission(Class<? extends T> permission) {
+        return (Optional<T>) permissions.stream()
+                                        .filter(permission::isInstance)
+                                        .findFirst();
     }
 
     @NotNull

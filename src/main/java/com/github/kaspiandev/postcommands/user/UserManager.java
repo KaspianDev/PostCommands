@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class UserFactory {
+public class UserManager {
 
     private final PostCommands plugin;
     private final List<User> users;
 
     @SuppressWarnings("unchecked")
-    public UserFactory(PostCommands plugin) {
+    public UserManager(PostCommands plugin) {
         this.plugin = plugin;
         List<User> configUsers = (List<User>) plugin.getConfig().getList("users");
         this.users = (configUsers == null)

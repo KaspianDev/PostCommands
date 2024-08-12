@@ -10,7 +10,7 @@ import com.github.kaspiandev.postcommands.token.TokenFactory;
 import com.github.kaspiandev.postcommands.token.TokenSecretGenerator;
 import com.github.kaspiandev.postcommands.user.User;
 import com.github.kaspiandev.postcommands.user.UserData;
-import com.github.kaspiandev.postcommands.user.UserFactory;
+import com.github.kaspiandev.postcommands.user.UserManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.javalin.Javalin;
@@ -25,7 +25,7 @@ public final class PostCommands extends JavaPlugin {
     private final Gson gson = new GsonBuilder()
             .registerTypeAdapter(CommandRequest.class, new RequestDeserializer())
             .create();
-    private UserFactory userFactory;
+    private UserManager userManager;
     private TokenFactory tokenFactory;
 
     @Override
@@ -49,9 +49,9 @@ public final class PostCommands extends JavaPlugin {
 
         tokenFactory = new TokenFactory(this);
 
-        userFactory = new UserFactory(this);
-        if (userFactory.getUsers().isEmpty()) {
-            userFactory.addUser(new UserData("admin", List.of(new RequestTypePermission(RequestType.SERVER))));
+        userManager = new UserManager(this);
+        if (userManager.getUsers().isEmpty()) {
+            userManager.addUser(new UserData("admin", List.of(new RequestTypePermission(RequestType.SERVER))));
         }
 
         saveConfig();
@@ -74,8 +74,8 @@ public final class PostCommands extends JavaPlugin {
         return tokenFactory;
     }
 
-    public UserFactory getUserFactory() {
-        return userFactory;
+    public UserManager getUserManager() {
+        return userManager;
     }
 
 }
