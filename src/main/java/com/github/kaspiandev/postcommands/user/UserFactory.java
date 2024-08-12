@@ -9,29 +9,29 @@ import java.util.Optional;
 public class UserFactory {
 
     private final PostCommands plugin;
-    private final List<TokenUser> users;
+    private final List<User> users;
 
     @SuppressWarnings("unchecked")
     public UserFactory(PostCommands plugin) {
         this.plugin = plugin;
-        List<TokenUser> configUsers = (List<TokenUser>) plugin.getConfig().getList("users");
+        List<User> configUsers = (List<User>) plugin.getConfig().getList("users");
         this.users = (configUsers == null)
                 ? new ArrayList<>()
                 : configUsers;
     }
 
-    public TokenUser addUser(User user) {
-        TokenUser tokenUser = new TokenUser(user, plugin.getTokenFactory().generateToken(user));
-        users.add(tokenUser);
+    public User addUser(UserData userData) {
+        User user = new User(userData, plugin.getTokenFactory().generateToken(userData));
+        users.add(user);
         plugin.getConfig().set("users", users);
-        return tokenUser;
+        return user;
     }
 
-    public List<TokenUser> getUsers() {
+    public List<User> getUsers() {
         return users;
     }
 
-    public Optional<TokenUser> findUser(String name) {
+    public Optional<User> findUser(String name) {
         return users.stream()
                     .filter((user) -> user.getUser().getName().equals(name))
                     .findAny();

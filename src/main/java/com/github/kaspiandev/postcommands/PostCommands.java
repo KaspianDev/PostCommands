@@ -9,6 +9,7 @@ import com.github.kaspiandev.postcommands.request.RequestType;
 import com.github.kaspiandev.postcommands.token.TokenFactory;
 import com.github.kaspiandev.postcommands.token.TokenSecretGenerator;
 import com.github.kaspiandev.postcommands.user.User;
+import com.github.kaspiandev.postcommands.user.UserData;
 import com.github.kaspiandev.postcommands.user.UserFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -30,6 +31,9 @@ public final class PostCommands extends JavaPlugin {
     @Override
     public void onEnable() {
         ConfigurationSerialization.registerClass(APIPermission.class);
+        ConfigurationSerialization.registerClass(RequestTypePermission.class);
+        ConfigurationSerialization.registerClass(UserData.class);
+        ConfigurationSerialization.registerClass(User.class);
 
         getConfig().options().copyDefaults(true);
 
@@ -47,15 +51,14 @@ public final class PostCommands extends JavaPlugin {
 
         userFactory = new UserFactory(this);
         if (userFactory.getUsers().isEmpty()) {
-            userFactory.addUser(new User("admin", List.of(new RequestTypePermission(RequestType.SERVER))));
+            userFactory.addUser(new UserData("admin", List.of(new RequestTypePermission(RequestType.SERVER))));
         }
 
         saveConfig();
 
-        Javalin javalin = Javalin
-                .create()
-                .addEndpoint(new ExecuteEndpoint(this))
-                .start(getConfig().getString("host"), getConfig().getInt("port"));
+        Javalin.create()
+               .addEndpoint(new ExecuteEndpoint(this))
+               .start(getConfig().getString("host"), getConfig().getInt("port"));
     }
 
     @Override
@@ -69,6 +72,10 @@ public final class PostCommands extends JavaPlugin {
 
     public TokenFactory getTokenFactory() {
         return tokenFactory;
+    }
+
+    public UserFactory getUserFactory() {
+        return userFactory;
     }
 
 }

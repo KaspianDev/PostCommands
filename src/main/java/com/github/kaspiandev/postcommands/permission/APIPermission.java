@@ -1,6 +1,6 @@
 package com.github.kaspiandev.postcommands.permission;
 
-import com.github.kaspiandev.postcommands.user.User;
+import com.github.kaspiandev.postcommands.user.UserData;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,7 +11,7 @@ public interface APIPermission extends ConfigurationSerializable {
 
     String getName();
 
-    boolean check(User user);
+    boolean check(UserData userData);
 
     Map<String, Object> toMap();
 
