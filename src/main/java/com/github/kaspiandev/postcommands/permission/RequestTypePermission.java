@@ -3,9 +3,15 @@ package com.github.kaspiandev.postcommands.permission;
 import com.github.kaspiandev.postcommands.request.RequestType;
 import com.github.kaspiandev.postcommands.user.ApiUser;
 
+import java.util.Map;
+
 public class RequestTypePermission implements APIPermission {
 
     private final RequestType requestType;
+
+    public RequestTypePermission(Map<String, Object> data) {
+        this.requestType = RequestType.valueOf((String) data.get("request-type"));
+    }
 
     public RequestTypePermission(RequestType requestType) {
         this.requestType = requestType;
@@ -13,12 +19,19 @@ public class RequestTypePermission implements APIPermission {
 
     @Override
     public String getName() {
-        return "requestType";
+        return "request-type";
     }
 
     @Override
     public boolean check(ApiUser user) {
         return user.getPermission(this).isPresent();
+    }
+
+    @Override
+    public Map<String, Object> toMap() {
+        return Map.of(
+                "request-type", getRequestType().name()
+        );
     }
 
     public RequestType getRequestType() {
