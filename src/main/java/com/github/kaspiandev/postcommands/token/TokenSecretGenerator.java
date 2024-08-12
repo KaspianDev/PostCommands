@@ -12,7 +12,7 @@ public class TokenSecretGenerator {
     private TokenSecretGenerator() {}
 
     public static String generate() throws NoSuchAlgorithmException {
-        byte[] tokenData = new byte[384];
+        byte[] tokenData = new byte[256];
         RANDOM.nextBytes(tokenData);
 
         MessageDigest sha256Digest = MessageDigest.getInstance("SHA-256");

@@ -2,6 +2,7 @@ package com.github.kaspiandev.postcommands.request;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.Plugin;
 
 import java.util.Optional;
 
@@ -25,13 +26,17 @@ public abstract class CommandRequest {
 
     public abstract Optional<CommandSender> getSender();
 
-    public RequestStatus execute() {
+    public RequestStatus execute(Plugin plugin) {
         return getSender().map((sender) -> {
             if (command == null || command.isEmpty()) {
                 return RequestStatus.COMMAND_UNSET;
             }
 
-            Bukkit.dispatchCommand(sender, command);
+            if (Bukkit.isPrimaryThread()) {
+                Bukkit.dispatchCommand(sender, command);
+            } else {
+                Bukkit.getScheduler().runTask(plugin, () -> Bukkit.dispatchCommand(sender, command));
+            }
             return RequestStatus.OK;
         }).orElse(RequestStatus.NO_SENDER);
     }

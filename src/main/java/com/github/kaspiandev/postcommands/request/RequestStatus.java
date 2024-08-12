@@ -1,12 +1,11 @@
 package com.github.kaspiandev.postcommands.request;
 
-import io.javalin.http.HttpResponseException;
 import io.javalin.http.HttpStatus;
 
 public enum RequestStatus {
 
     COMMAND_UNSET(HttpStatus.BAD_REQUEST, "Command is unset or empty!"),
-    NO_SENDER(HttpStatus.BAD_REQUEST, "Sender is needed for this Request and was not found!"),
+    NO_SENDER(HttpStatus.BAD_REQUEST, "Sender is needed for this request and was not found!"),
     OK(HttpStatus.OK, "Command executed successfully!");
 
     private final HttpStatus httpStatus;
@@ -25,8 +24,8 @@ public enum RequestStatus {
         return message;
     }
 
-    public HttpResponseException getException() {
-        return new HttpResponseException(httpStatus.getCode(), message);
+    public RequestStatusResponse getResponse() {
+        return new RequestStatusResponse(httpStatus.getCode(), message);
     }
 
 }
