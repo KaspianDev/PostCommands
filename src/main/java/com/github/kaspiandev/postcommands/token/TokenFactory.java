@@ -5,7 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.github.kaspiandev.postcommands.PostCommands;
-import com.github.kaspiandev.postcommands.user.ApiUser;
+import com.github.kaspiandev.postcommands.user.User;
 
 import java.util.Objects;
 
@@ -20,7 +20,7 @@ public class TokenFactory {
     }
 
     // TODO: Better, permission-based tokens
-    public String generateToken(ApiUser user) {
+    public String generateToken(User user) {
         return JWT.create()
                   .withSubject(user.getName())
                   .sign(algorithm);

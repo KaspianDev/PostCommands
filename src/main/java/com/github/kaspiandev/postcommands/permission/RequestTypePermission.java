@@ -1,7 +1,7 @@
 package com.github.kaspiandev.postcommands.permission;
 
 import com.github.kaspiandev.postcommands.request.RequestType;
-import com.github.kaspiandev.postcommands.user.ApiUser;
+import com.github.kaspiandev.postcommands.user.User;
 
 import java.util.Map;
 
@@ -23,7 +23,7 @@ public class RequestTypePermission implements APIPermission {
     }
 
     @Override
-    public boolean check(ApiUser user) {
+    public boolean check(User user) {
         return user.getPermission(this).isPresent();
     }
 

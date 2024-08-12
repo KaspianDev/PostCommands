@@ -4,17 +4,16 @@ import com.github.kaspiandev.postcommands.permission.APIPermission;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
-public class ApiUser implements ConfigurationSerializable {
+public class User implements ConfigurationSerializable {
 
     private final String name;
-    private final Set<APIPermission> permissions;
+    private final List<APIPermission> permissions;
 
-    public ApiUser(String name, Set<APIPermission> permissions) {
+    public User(String name, List<APIPermission> permissions) {
         this.name = name;
         this.permissions = permissions;
     }
@@ -23,7 +22,7 @@ public class ApiUser implements ConfigurationSerializable {
         return name;
     }
 
-    public Set<APIPermission> getPermissions() {
+    public List<APIPermission> getPermissions() {
         return permissions;
     }
 
@@ -37,8 +36,8 @@ public class ApiUser implements ConfigurationSerializable {
     @Override
     public Map<String, Object> serialize() {
         return Map.of(
-                "name", getName(),
-                "permissions", new ArrayList<>(getPermissions())
+                "name", name,
+                "permissions", getPermissions()
         );
     }
 

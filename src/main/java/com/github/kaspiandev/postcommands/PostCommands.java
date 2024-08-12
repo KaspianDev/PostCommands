@@ -1,28 +1,36 @@
 package com.github.kaspiandev.postcommands;
 
 import com.github.kaspiandev.postcommands.endpoint.ExecuteEndpoint;
+import com.github.kaspiandev.postcommands.permission.APIPermission;
 import com.github.kaspiandev.postcommands.permission.RequestTypePermission;
 import com.github.kaspiandev.postcommands.request.CommandRequest;
 import com.github.kaspiandev.postcommands.request.RequestDeserializer;
 import com.github.kaspiandev.postcommands.request.RequestType;
+import com.github.kaspiandev.postcommands.token.TokenFactory;
 import com.github.kaspiandev.postcommands.token.TokenSecretGenerator;
-import com.github.kaspiandev.postcommands.user.ApiUser;
+import com.github.kaspiandev.postcommands.user.User;
+import com.github.kaspiandev.postcommands.user.UserFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.javalin.Javalin;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.Set;
+import java.util.List;
 
 public final class PostCommands extends JavaPlugin {
 
     private final Gson gson = new GsonBuilder()
             .registerTypeAdapter(CommandRequest.class, new RequestDeserializer())
             .create();
+    private UserFactory userFactory;
+    private TokenFactory tokenFactory;
 
     @Override
     public void onEnable() {
+        ConfigurationSerialization.registerClass(APIPermission.class);
+
         getConfig().options().copyDefaults(true);
 
         if (!getConfig().isSet("secret")) {
@@ -35,7 +43,12 @@ public final class PostCommands extends JavaPlugin {
             }
         }
 
-        getConfig().set("a", new ApiUser("kaspian", Set.of(new RequestTypePermission(RequestType.SERVER))));
+        tokenFactory = new TokenFactory(this);
+
+        userFactory = new UserFactory(this);
+        if (userFactory.getUsers().isEmpty()) {
+            userFactory.addUser(new User("admin", List.of(new RequestTypePermission(RequestType.SERVER))));
+        }
 
         saveConfig();
 
@@ -52,6 +65,10 @@ public final class PostCommands extends JavaPlugin {
 
     public Gson getGson() {
         return gson;
+    }
+
+    public TokenFactory getTokenFactory() {
+        return tokenFactory;
     }
 
 }
