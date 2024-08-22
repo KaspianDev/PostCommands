@@ -7,13 +7,16 @@ import java.util.Map;
 public class CommandPermission implements APIPermission {
 
     private final String command;
+    private final boolean strict;
 
     public CommandPermission(Map<String, Object> data) {
         this.command = (String) data.get("command");
+        this.strict = (boolean) data.get("strict");
     }
 
-    public CommandPermission(String command) {
+    public CommandPermission(String command, boolean strict) {
         this.command = command;
+        this.strict = strict;
     }
 
     @Override
@@ -24,14 +27,23 @@ public class CommandPermission implements APIPermission {
     @Override
     public boolean check(CommandRequest commandRequest) {
         if (command.equals("*")) return true;
-        return commandRequest.getCommand().startsWith(command);
+        if (strict) {
+            return commandRequest.getCommand().equals(command);
+        } else {
+            return commandRequest.getCommand().startsWith(command);
+        }
     }
 
     @Override
     public Map<String, Object> toMap() {
         return Map.of(
-                "command", command
+                "command", command,
+                "strict", strict
         );
+    }
+
+    public boolean isStrict() {
+        return strict;
     }
 
     public String getCommand() {
@@ -41,7 +53,8 @@ public class CommandPermission implements APIPermission {
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof CommandPermission commandPermission)) return false;
-        return commandPermission.getCommand().equals(command);
+        if (commandPermission.strict != strict) return false;
+        return commandPermission.command.equals(command);
     }
 
 }
