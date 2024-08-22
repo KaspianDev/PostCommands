@@ -7,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 public class UserData implements ConfigurationSerializable {
 
@@ -33,11 +32,11 @@ public class UserData implements ConfigurationSerializable {
         return permissions;
     }
 
-    @SuppressWarnings("unchecked")
-    public <T extends APIPermission> Optional<T> getPermission(Class<? extends T> permission) {
-        return (Optional<T>) permissions.stream()
-                                        .filter(permission::isInstance)
-                                        .findFirst();
+    public <T extends APIPermission> List<T> getPermissionsOfType(Class<T> permission) {
+        return permissions.stream()
+                          .filter(permission::isInstance)
+                          .map(permission::cast)
+                          .toList();
     }
 
     @NotNull

@@ -3,6 +3,7 @@ package com.github.kaspiandev.postcommands.endpoint;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.github.kaspiandev.postcommands.PostCommands;
+import com.github.kaspiandev.postcommands.permission.CommandPermission;
 import com.github.kaspiandev.postcommands.permission.RequestTypePermission;
 import com.github.kaspiandev.postcommands.request.CommandRequest;
 import com.github.kaspiandev.postcommands.request.RequestStatus;
@@ -15,6 +16,7 @@ import io.javalin.http.Header;
 import io.javalin.http.UnauthorizedResponse;
 import io.javalin.router.Endpoint;
 
+import java.util.List;
 import java.util.Optional;
 
 public class ExecuteEndpoint extends Endpoint {
@@ -39,13 +41,25 @@ public class ExecuteEndpoint extends Endpoint {
 
                         String body = context.body();
                         try {
-                            Optional<RequestTypePermission> typePermission = userData.getPermission(RequestTypePermission.class);
-                            if (typePermission.isEmpty()) throw new UnauthorizedResponse();
+                            // TODO: Add a loop and registry to permissions to prevent code duplication
+                            List<RequestTypePermission> typePermissions = userData.getPermissionsOfType(RequestTypePermission.class);
+                            if (typePermissions.isEmpty()) throw new UnauthorizedResponse();
 
                             CommandRequest request = plugin.getGson().fromJson(body, CommandRequest.class);
-                            if (!typePermission.get().check(request)) throw new UnauthorizedResponse();
+                            if (typePermissions.stream()
+                                               .noneMatch((permission) -> permission.check(request))) {
+                                throw new UnauthorizedResponse();
+                            }
 
-                            RequestStatus status = request.execute(plugin);
+                            List<CommandPermission> commandPermissions = userData.getPermissionsOfType(CommandPermission.class);
+                            if (commandPermissions.isEmpty()) throw new UnauthorizedResponse();
+
+                            if (commandPermissions.stream()
+                                               .noneMatch((permission) -> permission.check(request))) {
+                                throw new UnauthorizedResponse();
+                            }
+
+                                RequestStatus status = request.execute(plugin);
                             throw status.getResponse();
                         } catch (JsonParseException ex) {
                             throw new BadRequestResponse("Could not parse JSON!");
