@@ -1,5 +1,7 @@
 # PostCommands
 
+![](assets/postcommands.png)
+
 PostCommands allows you to set up a REST server to remotely execute commands on 
 the server as player or server. User creation isn't available as of yet.
 
